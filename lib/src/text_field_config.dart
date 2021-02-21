@@ -4,7 +4,7 @@ part of autocomplete_textfield;
 class TextFieldConfiguration {
   const TextFieldConfiguration({
     this.decoration = const InputDecoration(),
-    TextInputType keyboardType,
+    TextInputType? keyboardType,
     this.textInputAction,
     this.textCapitalization = TextCapitalization.none,
     this.style,
@@ -13,14 +13,14 @@ class TextFieldConfiguration {
     this.textAlignVertical,
     this.textDirection,
     this.readOnly = false,
-    ToolbarOptions toolbarOptions,
+    ToolbarOptions? toolbarOptions,
     this.showCursor,
     this.autofocus = false,
     this.obscuringCharacter = '•',
     this.obscureText = false,
     this.autocorrect = true,
-    SmartDashesType smartDashesType,
-    SmartQuotesType smartQuotesType,
+    SmartDashesType? smartDashesType,
+    SmartQuotesType? smartQuotesType,
     this.enableSuggestions = true,
     this.maxLines = 1,
     this.minLines,
@@ -50,28 +50,15 @@ class TextFieldConfiguration {
     this.scrollPhysics,
     this.autofillHints,
     this.restorationId,
-  })  : assert(textAlign != null),
-        assert(readOnly != null),
-        assert(autofocus != null),
-        assert(obscuringCharacter != null && obscuringCharacter.length == 1),
-        assert(obscureText != null),
-        assert(autocorrect != null),
+  })  : assert(obscuringCharacter.length == 1),
         smartDashesType = smartDashesType ?? (obscureText ? SmartDashesType.disabled : SmartDashesType.enabled),
         smartQuotesType = smartQuotesType ?? (obscureText ? SmartQuotesType.disabled : SmartQuotesType.enabled),
-        assert(enableSuggestions != null),
-        assert(enableInteractiveSelection != null),
-        assert(maxLengthEnforced != null),
-        assert(scrollPadding != null),
-        assert(dragStartBehavior != null),
-        assert(selectionHeightStyle != null),
-        assert(selectionWidthStyle != null),
         assert(maxLines == null || maxLines > 0),
         assert(minLines == null || minLines > 0),
         assert(
           (maxLines == null) || (minLines == null) || (maxLines >= minLines),
           "minLines can't be greater than maxLines",
         ),
-        assert(expands != null),
         assert(
           !expands || (maxLines == null && minLines == null),
           'minLines and maxLines must be null when expands is true.',
@@ -98,33 +85,32 @@ class TextFieldConfiguration {
                     paste: true,
                   ));
 
-
   /// See [TextField.decoration]
-  final InputDecoration decoration;
+  final InputDecoration? decoration;
 
   /// See [TextField.keyboardType]
   final TextInputType keyboardType;
 
   /// See [TextField.textInputAction]
-  final TextInputAction textInputAction;
+  final TextInputAction? textInputAction;
 
   /// See [TextField.textCapitalization]
   final TextCapitalization textCapitalization;
 
   /// See [TextField.style]
-  final TextStyle style;
+  final TextStyle? style;
 
   /// See [TextField.strutStyle]
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// See [TextField.textAlign]
   final TextAlign textAlign;
 
   /// See [TextField.textAlignVertical]
-  final TextAlignVertical textAlignVertical;
+  final TextAlignVertical? textAlignVertical;
 
   /// See [TextField.textDirection]
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// See [TextField.autofocus]
   final bool autofocus;
@@ -139,19 +125,19 @@ class TextFieldConfiguration {
   final bool autocorrect;
 
   /// See [TextField.smartDashesType]
-  final SmartDashesType smartDashesType;
+  final SmartDashesType? smartDashesType;
 
   /// See [TextField.smartQuotesType]
-  final SmartQuotesType smartQuotesType;
+  final SmartQuotesType? smartQuotesType;
 
   /// See [TextField.enableSuggestions]
   final bool enableSuggestions;
 
   /// See [TextField.maxLines]
-  final int maxLines;
+  final int? maxLines;
 
   /// See [TextField.minLines]
-  final int minLines;
+  final int? minLines;
 
   /// See [TextField.expands]
   final bool expands;
@@ -163,28 +149,29 @@ class TextFieldConfiguration {
   final ToolbarOptions toolbarOptions;
 
   /// See [TextField.showCursor]
-  final bool showCursor;
+  final bool? showCursor;
 
   /// See [TextField.maxLength]
-  final int maxLength;
+  final int? maxLength;
 
   /// See [TextField.maxLengthEnforced]
+  @deprecated
   final bool maxLengthEnforced;
 
   /// See [TextField.onChanged]
-  final ValueChanged<String> onChanged;
+  final ValueChanged<String>? onChanged;
 
   /// See [TextField.onEditingComplete]
-  final VoidCallback onEditingComplete;
+  final VoidCallback? onEditingComplete;
 
   /// See [TextField.onSubmitted]
-  final ValueChanged<String> onSubmitted;
+  final ValueChanged<String>? onSubmitted;
 
   /// See [TextField.onAppPrivateCommand]
-  final AppPrivateCommandCallback onAppPrivateCommand;
+  final AppPrivateCommandCallback? onAppPrivateCommand;
 
   /// See [TextField.inputFormatters]
-  final List<TextInputFormatter> inputFormatters;
+  final List<TextInputFormatter>? inputFormatters;
 
   /// See [TextField.enabled]
   final bool enabled;
@@ -193,13 +180,13 @@ class TextFieldConfiguration {
   final double cursorWidth;
 
   /// See [TextField.cursorHeight]
-  final double cursorHeight;
+  final double? cursorHeight;
 
   /// See [TextField.cursorRadius]
-  final Radius cursorRadius;
+  final Radius? cursorRadius;
 
   /// See [TextField.cursorColor]
-  final Color cursorColor;
+  final Color? cursorColor;
 
   /// See [TextField.selectionHeightStyle]
   final ui.BoxHeightStyle selectionHeightStyle;
@@ -208,7 +195,7 @@ class TextFieldConfiguration {
   final ui.BoxWidthStyle selectionWidthStyle;
 
   /// See [TextField.keyboardAppearance]
-  final Brightness keyboardAppearance;
+  final Brightness? keyboardAppearance;
 
   /// See [TextField.scrollPadding]
   final EdgeInsets scrollPadding;
@@ -220,74 +207,74 @@ class TextFieldConfiguration {
   final DragStartBehavior dragStartBehavior;
 
   /// See [TextField.onTap]
-  final GestureTapCallback onTap;
+  final GestureTapCallback? onTap;
 
   /// See [TextField.mouseCursor]
-  final MouseCursor mouseCursor;
+  final MouseCursor? mouseCursor;
 
   /// See [TextField.buildCounter]
-  final InputCounterWidgetBuilder buildCounter;
+  final InputCounterWidgetBuilder? buildCounter;
 
   /// See [TextField.scrollPhysics]
-  final ScrollPhysics scrollPhysics;
+  final ScrollPhysics? scrollPhysics;
 
   /// See [TextField.scrollController]
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
 
   /// See [TextField.autofillHints]
-  final Iterable<String> autofillHints;
+  final Iterable<String>? autofillHints;
 
   /// See [TextField.restorationId]
-  final String restorationId;
+  final String? restorationId;
 
   TextFieldConfiguration copyWith({
-    InputDecoration decoration,
-    TextInputType keyboardType,
-    TextInputAction textInputAction,
-    TextCapitalization textCapitalization,
-    TextStyle style,
-    StrutStyle strutStyle,
-    TextAlign textAlign,
-    TextAlignVertical textAlignVertical,
-    TextDirection textDirection,
-    bool autofocus,
-    String obscuringCharacter,
-    bool obscureText,
-    bool autocorrect,
-    SmartDashesType smartDashesType,
-    SmartQuotesType smartQuotesType,
-    bool enableSuggestions,
-    int maxLines,
-    int minLines,
-    bool expands,
-    bool readOnly,
-    ToolbarOptions toolbarOptions,
-    bool showCursor,
-    int maxLength,
-    bool maxLengthEnforced,
-    ValueChanged<String> onChanged,
-    VoidCallback onEditingComplete,
-    ValueChanged<String> onSubmitted,
-    AppPrivateCommandCallback onAppPrivateCommand,
-    List<TextInputFormatter> inputFormatters,
-    bool enabled,
-    double cursorWidth,
-    double cursorHeight,
-    Radius cursorRadius,
-    Color cursorColor,
-    ui.BoxHeightStyle selectionHeightStyle,
-    ui.BoxWidthStyle selectionWidthStyle,
-    Brightness keyboardAppearance,
-    EdgeInsets scrollPadding,
-    bool enableInteractiveSelection,
-    DragStartBehavior dragStartBehavior,
-    GestureTapCallback onTap,
-    MouseCursor mouseCursor,
-    InputCounterWidgetBuilder buildCounter,
-    ScrollPhysics scrollPhysics,
-    ScrollController scrollController,
-    Iterable<String> autofillHints,
-    String restorationId,
+    InputDecoration? decoration,
+    TextInputType? keyboardType,
+    TextInputAction? textInputAction,
+    TextCapitalization? textCapitalization,
+    TextStyle? style,
+    StrutStyle? strutStyle,
+    TextAlign? textAlign,
+    TextAlignVertical? textAlignVertical,
+    TextDirection? textDirection,
+    bool? autofocus,
+    String? obscuringCharacter,
+    bool? obscureText,
+    bool? autocorrect,
+    SmartDashesType? smartDashesType,
+    SmartQuotesType? smartQuotesType,
+    bool? enableSuggestions,
+    int? maxLines,
+    int? minLines,
+    bool? expands,
+    bool? readOnly,
+    ToolbarOptions? toolbarOptions,
+    bool? showCursor,
+    int? maxLength,
+    bool? maxLengthEnforced,
+    ValueChanged<String>? onChanged,
+    VoidCallback? onEditingComplete,
+    ValueChanged<String>? onSubmitted,
+    AppPrivateCommandCallback? onAppPrivateCommand,
+    List<TextInputFormatter>? inputFormatters,
+    bool? enabled,
+    double? cursorWidth,
+    double? cursorHeight,
+    Radius? cursorRadius,
+    Color? cursorColor,
+    ui.BoxHeightStyle? selectionHeightStyle,
+    ui.BoxWidthStyle? selectionWidthStyle,
+    Brightness? keyboardAppearance,
+    EdgeInsets? scrollPadding,
+    bool? enableInteractiveSelection,
+    DragStartBehavior? dragStartBehavior,
+    GestureTapCallback? onTap,
+    MouseCursor? mouseCursor,
+    InputCounterWidgetBuilder? buildCounter,
+    ScrollPhysics? scrollPhysics,
+    ScrollController? scrollController,
+    Iterable<String>? autofillHints,
+    String? restorationId,
   }) {
     return TextFieldConfiguration(
       decoration: decoration ?? this.decoration,

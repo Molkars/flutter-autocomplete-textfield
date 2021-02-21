@@ -29,7 +29,7 @@ class _FormExampleState extends State<FormExample> {
 
   void _validate() {
     if (_formKey.currentState.validate()) {
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Assignment Created')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Assignment Created')));
     }
   }
 
@@ -47,7 +47,7 @@ class _FormExampleState extends State<FormExample> {
   List<Assignment> _assignments = [];
 
   void _showUsersDialog() {
-    showDialog(context: context, child: _Dialog(users: _users));
+    showDialog(context: context, builder: (_) => _Dialog(users: _users));
   }
 
   @override
@@ -121,7 +121,7 @@ class _FormExampleState extends State<FormExample> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         child: Text('Create'),
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
@@ -245,12 +245,12 @@ class __DialogState extends State<_Dialog> {
     }
 
     Iterable<Widget> _actions() sync* {
-      yield FlatButton(
+      yield TextButton(
         child: Text(_isFirstPage ? 'Add a User' : 'See users'),
         onPressed: () => setState(() => _isFirstPage = !_isFirstPage),
       );
 
-      yield FlatButton(
+      yield TextButton(
         child: Text('Done'),
         onPressed: _isFirstPage
             ? () {

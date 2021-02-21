@@ -4,7 +4,6 @@ typedef bool SimpleAutoCompleteTextFilter(String value, String query);
 
 /// An [AutoCompleteTextField] simplified to only support strings and have additional callbacks for sorting and filtering
 class SimpleAutoCompleteTextField extends AutoCompleteTextField<String> {
-
   /// Creates a [TextField] with pop up suggestions
   ///
   /// The parameters [suggestions], [suggestionLimit], [itemFilter] are required
@@ -12,25 +11,19 @@ class SimpleAutoCompleteTextField extends AutoCompleteTextField<String> {
   /// By default [onItemSelected] returns the it's string value
   /// Parameters [duration], [config], and [textFieldConfig] must not be null but have defaults
   SimpleAutoCompleteTextField({
-    Key key,
-    TextEditingController controller,
-    FocusNode focusNode,
-    @required List<String> suggestions,
-    @required int suggestionLimit,
-    @required SimpleAutoCompleteTextFilter itemFilter,
-    AutoCompleteEntrySelected<String> onItemSelected,
-    Comparator<String> sorter,
-    AutoCompleteNoSuggestionsBuilder noSuggestionsBuilder,
+    Key? key,
+    TextEditingController? controller,
+    FocusNode? focusNode,
+    required List<String> suggestions,
+    required int suggestionLimit,
+    required SimpleAutoCompleteTextFilter itemFilter,
+    AutoCompleteEntrySelected<String>? onItemSelected,
+    Comparator<String>? sorter,
+    AutoCompleteNoSuggestionsBuilder? noSuggestionsBuilder,
     Duration duration = const Duration(milliseconds: 300),
     AutoCompleteConfiguration config = const AutoCompleteConfiguration(),
     TextFieldConfiguration textFieldConfig = const TextFieldConfiguration(),
-  })  : assert(suggestions != null),
-        assert(suggestionLimit != null),
-        assert(itemFilter != null),
-        assert(duration != null),
-        assert(textFieldConfig != null),
-        assert(config != null),
-        super(
+  }) : super(
           key: key,
           duration: duration,
           textFieldConfig: textFieldConfig,

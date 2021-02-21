@@ -5,7 +5,7 @@ typedef Widget AutoCompleteErrorBuilder(BuildContext context, Object error);
 typedef String AutoCompleteEntrySelected<T>(T value);
 typedef Widget AutoCompleteNoSuggestionsBuilder(BuildContext context, String term);
 
-Widget _defaultTransitionBuilder(BuildContext context, Animation<double> animation, Widget child) =>
+Widget _defaultTransitionBuilder(BuildContext context, Animation<double> animation, Widget? child) =>
     FadeTransition(opacity: animation, child: child);
 
 class AutoCompleteEntry<T> {
@@ -13,7 +13,7 @@ class AutoCompleteEntry<T> {
   final bool ignoreOnSelected;
 
   /// Called when the item is selected
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   /// Determines if this entry should ignore [AutoCompleteConfiguration.clearOnSelected]
   final bool ignoreClearOnSelected;
@@ -35,21 +35,15 @@ class AutoCompleteEntry<T> {
   final T value;
 
   const AutoCompleteEntry({
+    required this.value,
+    required this.child,
     this.ignoreOnSelected = false,
     this.ignoreClearOnSelected = false,
     this.ignoreDismissOnSelected = false,
     this.overrideCallbacks = false,
     this.onTap,
     this.enabled = true,
-    @required this.value,
-    @required this.child,
-  })  : assert(child != null),
-        assert(ignoreOnSelected != null),
-        assert(ignoreOnSelected != null),
-        assert(ignoreClearOnSelected != null),
-        assert(ignoreDismissOnSelected != null),
-        assert(enabled != null),
-        assert(overrideCallbacks != null);
+  });
 }
 
 class _RenderDetails {
@@ -84,20 +78,20 @@ class AutoCompleteTextField<T> extends StatefulWidget {
   final AutoCompleteEntrySelected<T> onItemSelected;
   final AutoCompleteConfiguration config;
   final TextFieldConfiguration textFieldConfig;
-  final TextEditingController controller;
-  final FocusNode focusNode;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
   final Duration duration;
-  final Duration reverseDuration;
-  final AnimatedTransitionBuilder transitionBuilder;
-  final WidgetBuilder loadingBuilder;
-  final AutoCompleteErrorBuilder errorBuilder;
-  final AutoCompleteNoSuggestionsBuilder noSuggestionsBuilder;
+  final Duration? reverseDuration;
+  final AnimatedTransitionBuilder? transitionBuilder;
+  final WidgetBuilder? loadingBuilder;
+  final AutoCompleteErrorBuilder? errorBuilder;
+  final AutoCompleteNoSuggestionsBuilder? noSuggestionsBuilder;
 
   const AutoCompleteTextField({
-    Key key,
-    @required this.duration,
-    @required this.itemBuilder,
-    @required this.onItemSelected,
+    Key? key,
+    required this.duration,
+    required this.itemBuilder,
+    required this.onItemSelected,
     this.textFieldConfig = const TextFieldConfiguration(),
     this.config = const AutoCompleteConfiguration(),
     this.focusNode,
@@ -107,10 +101,7 @@ class AutoCompleteTextField<T> extends StatefulWidget {
     this.loadingBuilder,
     this.errorBuilder,
     this.noSuggestionsBuilder,
-  })  : assert(duration != null),
-        assert(itemBuilder != null),
-        assert(onItemSelected != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _AutoCompleteTextFieldState<T> createState() => _AutoCompleteTextFieldState<T>();
@@ -118,15 +109,15 @@ class AutoCompleteTextField<T> extends StatefulWidget {
 
 class _AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField<T>>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  TextEditingController _textController;
-  FocusNode _focusNode;
-  AnimationController _animationController;
-  OverlayEntry _overlayEntry;
+  TextEditingController? _textController;
+  FocusNode? _focusNode;
+  late final AnimationController _animationController;
+  OverlayEntry? _overlayEntry;
   final LayerLink _link = LayerLink();
 
-  TextEditingController get _effectiveController => widget.controller ?? _textController;
+  TextEditingController get _effectiveController => widget.controller ?? _textController!;
 
-  FocusNode get _effectiveNode => widget.focusNode ?? _focusNode;
+  FocusNode get _effectiveNode => widget.focusNode ?? _focusNode!;
 
   RenderBox get _renderBox => context.findRenderObject() as RenderBox;
 
@@ -141,7 +132,7 @@ class _AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField<T>>
     if (widget.focusNode == null) {
       _focusNode = FocusNode();
     }
-    WidgetsBinding.instance
+    WidgetsBinding.instance!
       ..addObserver(this)
       ..addPostFrameCallback((_) {
         _overlayEntry?.markNeedsBuild();
@@ -158,7 +149,7 @@ class _AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField<T>>
   void _focusListener() {
     if (_effectiveNode.hasFocus) {
       if (!_tryInsertOverlay()) {
-        _overlayEntry.markNeedsBuild();
+        _overlayEntry!.markNeedsBuild();
       }
     } else {
       removeOverlay();
@@ -167,7 +158,7 @@ class _AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField<T>>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     _animationController.dispose();
     _effectiveNode.removeListener(_focusListener);
     _textController?.dispose();
@@ -184,7 +175,7 @@ class _AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField<T>>
   Future<void> removeOverlay() async {
     if (_overlayEntry != null) {
       await _animationController.reverse();
-      _overlayEntry.remove();
+      _overlayEntry!.remove();
       _overlayEntry = null;
     }
   }
@@ -235,7 +226,7 @@ class _AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField<T>>
   }
 
   List<Widget> _mapEntries(List<AutoCompleteEntry<T>> entries, Size size) => entries
-      .map((x) => _OptionWidget(
+      .map((x) => _OptionWidget<T>(
             option: x,
             config: widget.config,
             enabled: widget.textFieldConfig.enabled,
@@ -244,9 +235,7 @@ class _AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField<T>>
             dismissCallback: _effectiveNode.unfocus,
             onSelected: (v) {
               final string = widget.onItemSelected(v);
-              if (string == null) {
-                return null;
-              } else if (!widget.config.clearOnSelected) {
+              if (!widget.config.clearOnSelected) {
                 _effectiveController.text = string;
                 _effectiveController.selection = TextSelection.fromPosition(TextPosition(offset: string.length));
               } else {
@@ -314,24 +303,24 @@ class _AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField<T>>
                       );
                     }
 
-                    if (futureOr is Future) {
+                    if (futureOr is Future<List<AutoCompleteEntry<T>>>) {
                       return FutureBuilder<List<AutoCompleteEntry<T>>>(
-                        future: futureOr as Future,
+                        future: futureOr,
                         builder: (context, snap) {
                           if (snap.hasError) {
-                            return _body([_errorBuilder(context, snap.error)]);
+                            return _body([_errorBuilder(context, snap.error!)]);
                           } else if (snap.hasData) {
                             final items = snap.data;
                             assert(items != null);
 
-                            if (items.isEmpty) {
+                            if (items!.isEmpty) {
                               if (widget.noSuggestionsBuilder != null) {
-                                return _body([widget.noSuggestionsBuilder(context, _effectiveController.text)]);
+                                return _body([widget.noSuggestionsBuilder!(context, _effectiveController.text)]);
                               } else {
                                 return ConstrainedBox(constraints: BoxConstraints.tight(Size.zero));
                               }
                             } else {
-                              return _body(_mapEntries(snap.data, size));
+                              return _body(_mapEntries(snap.data!, size));
                             }
                           } else {
                             return _body([_loadingBuilder(context)]);
@@ -339,15 +328,14 @@ class _AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField<T>>
                         },
                       );
                     } else {
-                      final raw = futureOr as List<AutoCompleteEntry<T>>;
-                      if (raw.isEmpty) {
+                      if (futureOr.isEmpty) {
                         if (widget.noSuggestionsBuilder != null) {
-                          return _body([widget.noSuggestionsBuilder(context, _effectiveController.text)]);
+                          return _body([widget.noSuggestionsBuilder!(context, _effectiveController.text)]);
                         } else {
                           return ConstrainedBox(constraints: BoxConstraints.tight(Size.zero));
                         }
                       }
-                      return _body(_mapEntries(raw, size));
+                      return _body(_mapEntries(futureOr, size));
                     }
                   },
                 ),
@@ -368,7 +356,7 @@ class _AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField<T>>
       );
     });
     _animationController.forward();
-    Overlay.of(context).insert(_overlayEntry);
+    Overlay.of(context)!.insert(_overlayEntry!);
     return true;
   }
 
@@ -441,30 +429,24 @@ class _OptionWidget<T> extends StatelessWidget {
   final bool enabled;
 
   const _OptionWidget({
-    Key key,
-    @required this.width,
-    @required this.config,
-    @required this.option,
-    @required this.dismissCallback,
-    @required this.clearCallback,
-    @required this.enabled,
-    @required this.onSelected,
-  })  : assert(width != null),
-        assert(config != null),
-        assert(option != null),
-        assert(dismissCallback != null),
-        assert(clearCallback != null),
-        assert(enabled != null),
-        assert(onSelected != null),
-        super(key: key);
+    Key? key,
+    required this.width,
+    required this.config,
+    required this.option,
+    required this.dismissCallback,
+    required this.clearCallback,
+    required this.enabled,
+    required this.onSelected,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget body = option.child;
 
     final _enabled = option.enabled && enabled;
-    VoidCallback _clearCallback = config.clearOnSelected && option.ignoreClearOnSelected ? clearCallback : null;
-    VoidCallback _dismissCallback = config.dismissOnSelected && option.ignoreDismissOnSelected ? dismissCallback : null;
+    VoidCallback? _clearCallback = config.clearOnSelected && option.ignoreClearOnSelected ? clearCallback : null;
+    VoidCallback? _dismissCallback =
+        config.dismissOnSelected && option.ignoreDismissOnSelected ? dismissCallback : null;
 
     if (option.overrideCallbacks) {
       body = GestureDetector(

@@ -29,29 +29,24 @@ part of autocomplete_textfield;
 /// For a documentation about the various parameters, see [TextField] and [TextFieldConfiguration].
 class AutoCompleteTextFormField<T> extends FormField<String> {
   AutoCompleteTextFormField({
-    Key key,
+    Key? key,
     this.controller,
-    FocusNode focusNode,
-    String initialValue,
-    @required Duration duration,
-    @required AutoCompleteEntryBuilder<T> itemBuilder,
-    @required AutoCompleteEntrySelected<T> onItemSelected,
+    FocusNode? focusNode,
+    String? initialValue,
+    required Duration duration,
+    required AutoCompleteEntryBuilder<T> itemBuilder,
+    required AutoCompleteEntrySelected<T> onItemSelected,
     TextFieldConfiguration textFieldConfig = const TextFieldConfiguration(),
     AutoCompleteConfiguration config = const AutoCompleteConfiguration(),
-    Duration reverseDuration,
-    WidgetBuilder loadingBuilder,
-    AutoCompleteErrorBuilder errorBuilder,
-    AnimatedTransitionBuilder transitionBuilder,
-    AutoCompleteNoSuggestionsBuilder noSuggestionsBuilder,
-    FormFieldSetter<String> onSaved,
-    FormFieldValidator<String> validator,
-    AutovalidateMode autovalidateMode,
+    Duration? reverseDuration,
+    WidgetBuilder? loadingBuilder,
+    AutoCompleteErrorBuilder? errorBuilder,
+    AnimatedTransitionBuilder? transitionBuilder,
+    AutoCompleteNoSuggestionsBuilder? noSuggestionsBuilder,
+    FormFieldSetter<String>? onSaved,
+    FormFieldValidator<String>? validator,
+    AutovalidateMode? autovalidateMode,
   })  : assert(initialValue == null || controller == null),
-        assert(textFieldConfig != null),
-        assert(duration != null),
-        assert(itemBuilder != null),
-        assert(onItemSelected != null),
-        assert(config != null),
         super(
           key: key,
           initialValue: controller != null ? controller.text : (initialValue ?? ''),
@@ -65,7 +60,7 @@ class AutoCompleteTextFormField<T> extends FormField<String> {
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
             void onChangedHandler(String value) {
               if (textFieldConfig.onChanged != null) {
-                textFieldConfig.onChanged(value);
+                textFieldConfig.onChanged!(value);
               }
               field.didChange(value);
             }
@@ -95,16 +90,16 @@ class AutoCompleteTextFormField<T> extends FormField<String> {
           },
         );
 
-  final TextEditingController controller;
+  final TextEditingController? controller;
 
   @override
   FormFieldState<String> createState() => _AutoCompleteTextFormFieldState();
 }
 
 class _AutoCompleteTextFormFieldState extends FormFieldState<String> {
-  TextEditingController _controller;
+  TextEditingController? _controller;
 
-  TextEditingController get _effectiveController => widget.controller ?? _controller;
+  TextEditingController get _effectiveController => widget.controller ?? _controller!;
 
   @override
   AutoCompleteTextFormField get widget => super.widget as AutoCompleteTextFormField;
@@ -115,7 +110,7 @@ class _AutoCompleteTextFormFieldState extends FormFieldState<String> {
     if (widget.controller == null) {
       _controller = TextEditingController(text: widget.initialValue);
     } else {
-      widget.controller.addListener(_handleControllerChanged);
+      widget.controller!.addListener(_handleControllerChanged);
     }
   }
 
@@ -127,9 +122,9 @@ class _AutoCompleteTextFormFieldState extends FormFieldState<String> {
       widget.controller?.addListener(_handleControllerChanged);
 
       if (oldWidget.controller != null && widget.controller == null)
-        _controller = TextEditingController.fromValue(oldWidget.controller.value);
+        _controller = TextEditingController.fromValue(oldWidget.controller!.value);
       if (widget.controller != null) {
-        setValue(widget.controller.text);
+        setValue(widget.controller!.text);
         if (oldWidget.controller == null) _controller = null;
       }
     }
@@ -142,17 +137,17 @@ class _AutoCompleteTextFormFieldState extends FormFieldState<String> {
   }
 
   @override
-  void didChange(String value) {
+  void didChange(String? value) {
     super.didChange(value);
 
-    if (_effectiveController.text != value) _effectiveController.text = value;
+    if (_effectiveController.text != value) _effectiveController.text = value ?? '';
   }
 
   @override
   void reset() {
     super.reset();
     setState(() {
-      _effectiveController.text = widget.initialValue;
+      _effectiveController.text = widget.initialValue ?? '';
     });
   }
 

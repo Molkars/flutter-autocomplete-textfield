@@ -9,10 +9,10 @@ class AutoCompleteConfiguration {
   final double elevation;
 
   /// Shape border of the field
-  final ShapeBorder shape;
+  final ShapeBorder? shape;
 
   /// The background color of the popup
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// Determines if the popup should try to be shown above the field
   final bool preferAbove;
@@ -53,14 +53,5 @@ class AutoCompleteConfiguration {
     this.overflowLeeway = 0.0,
     this.clipBehavior = Clip.none,
     this.contentPadding = const EdgeInsets.symmetric(vertical: 4.0),
-  })  : assert(maxSize != null),
-        assert(elevation != null),
-        assert(preferAbove != null),
-        assert(reverseScrollDirection != null),
-        assert(clearOnSelected != null),
-        assert(dismissOnSelected != null),
-        assert(offset != null),
-        assert(overflowLeeway != null),
-        assert(clipBehavior != null),
-        assert(contentPadding != null);
+  });
 }
